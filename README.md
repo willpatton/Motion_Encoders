@@ -7,10 +7,10 @@ Here's an example to instantiate the class in a sample program:
 
 	#include "Motion_Encoders.h"
 
-	#define pinEnClk0   A2  //A2 
-	#define pinEnData0  A3  //A3
-	#define pinEnClk1   A4  //A4
-	#define pinEnData1  A5  //A5
+	#define pinEnClk0   A2
+	#define pinEnData0  A3
+	#define pinEnClk1   A4
+	#define pinEnData1  A5
 
 	//instantiate encoder objects
 	CEncoder DinL(11, pinEnClk0, pinEnData0);
