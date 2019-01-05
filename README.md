@@ -7,6 +7,7 @@ Here's an example to instantiate the class in a sample program:
 
 	#include "Motion_Encoders.h"
 
+	//pin assignments
 	#define pinEnClk0   A2  // "A" pins being used as signal inputs
 	#define pinEnData0  A3
 	#define pinEnClk1   A4
@@ -44,7 +45,7 @@ Here's an example to instantiate the class in a sample program:
 	  int focusR = DinR.get_focus();
 	  String strR = String("SwR: " + String(swPosR) + ", En: " + String(enPosR) + " Focus: " + String(focusR));
 
-	  //TODO: write strL and strL strings to console
+	  //write strL and strL strings to console
 	  Serial.print (strL);Serial.print (" ");Serial.println(strR);
 
 	}
@@ -65,7 +66,7 @@ Here's an example to instantiate the class in a sample program:
 	  DinR.isrEncoderB();        
 	}
 
-		
+
 
 ## Supported platforms
 This code known to compile using the Arduino IDE on a SAMD21 processor. 
