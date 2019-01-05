@@ -69,7 +69,7 @@ Here's an example to instantiate the class in a sample program:
 
 
 ## Supported platforms
-This code known to compile using the Arduino IDE on a SAMD21 processor. 
+This code is known to compile using the Arduino IDE on a SAMD21 processor. 
 
 ## For more information
 
