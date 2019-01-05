@@ -1,31 +1,27 @@
 /**
 Motion_Encoders.h
 
-@author: Will Patton http://willpatton.com 
-
-ROTORARY ENCODERS
-
-  See description and source examples from:
-  https://playground.arduino.cc/Main/RotaryEncoders
+ROTARY ENCODERS
    
   APPLICATION 
-     This is for a physical user interface control with knob/detent 
-     and push button switch such as a volume, tuning, or 
-     brightness (response >10ms).
+    This code is for an encoder/switch typically found
+    as volume, tuning, speed, or brightness control.
+    The encoder has a physical knob with detents and push button switch. 
 
-     This code may not be suitable for a high RPM motor encoder (response <10ms).
+    The advantage of this code is that it can be 
+    re-used for each encoder as an instantiated object and as a library.
      
-     QUADUATURE - There are 2 signals and therefore 4 possible 
+    QUADRATURE - There are 2 signals and therefore 4 possible 
      states (edges) that occur (i.e. "quad").
 
      METHOD 
-     INTERUPT THEN SAMPLE - 
-     Detect interupt on edge, then sample the I/O signal. 
+     INTERRUPT THEN SAMPLE - 
+     Detect interrupt on edge, then sample the I/O signal. 
 
-     SIGNALS (EDGE DETETION)
+     SIGNALS (EDGE DETECTION)
      PERSPECTIVE from "A" RISING edge
 
-             A leads B - CW
+     A leads B - CW
      A  ____|----|____|----|____|
      B     ____|----|____|----|
             ^ ^  ^ ^
@@ -35,7 +31,7 @@ ROTORARY ENCODERS
             | SAMPLE (*)  
             IRQ A RISING edge samples A as LOW
  
-             A lags B - CCW
+     A lags B - CCW
      A    ____|----|____|----|____|
      B  ____|----|____|----|
               ^ ^  ^ ^
@@ -50,64 +46,68 @@ ROTORARY ENCODERS
                 If A XOR B are both different levels, the CW
      
   TIMING
-    Example for a 24 point detent rotoray encoder.
+    Here are timing measurements using an oscilloscope 
+    for a 24 point rotary encoder (with detents).
 
     A <--> A  
-    "INTERVAL" from DETENT to DETENT
-    Twisting the knob speed  
-      Slow    500ms
-      Medium  100ms
-      Fast    50ms 
-
-    Here are typical timing measurements observed between 
-    channels.  The detent forces the contacts to advance.
+    "INTERVAL" from CH A to CH A.
+    Twisting speed  Interval
+      Slow          200ms
+      Medium        100ms
+      Fast          50ms
+      Rapid         10ms      Super-quick twist
+      Flick         1.50ms    Fast as humanly possible
 
     A <--> B  
-    LEAD/LAG DIFFERENCE (within one detent)
-    Twisting the knob speed  
-      Slow    10ms
-      Medium   5ms
-      Fast     3ms 
+    "INTERVAL" from CH A to CH B.
+    Twisting speed  Interval
+      Slow          10ms
+      Medium        5ms
+      Fast          3ms 
+      Rapid         1.0ms to 2.0ms   
+      Flick         500us      
+
       
   DEBOUNCE
-   * There is significant bounce on rotorary encorder's 
-   * pins (likely due to the mechanical swingback of detent's armature).  
+   There is typically significant bounce on rotary encoder's 
+   pins on the "break" and "make".  
 
-   * A significant bounce was typically observed at 2-3 milliseconds and 
-   * sometimes up to 5ms on the "break". A bounce of 1ms was 
-   * sometimes observed on a slow "make".  Since there are 2 switches 
-   * in a quaduature encoder firing at offset times, it is doublely
-   * complicated to confidently detect edges and sample the 
-   * the polarity of the 2 switched signals.
-   * 
-   * A rotorary encoder without detents may have less bound (or no 
-   * bounce) beause the dentent's armature doesn't exist thus reducing 
-   * kickback. 
-   * 
-   * Signals may require hardware or software debounce to improve 
-   * stablility of readings.
-   * 
-   * Hardware: Properly debounced encoder signals can be 
-   * sample as fast as allowed by the processor. For IoT processors, 
-   * 10 to 25 microseconds is a typical estimate per I/O sample. 
-   * This allows an ISR to sample and exit within 100us.
-   * 
-   * Software: No hardware debounce means consequences for the 
-   * ISR which may take tens-of-milliseconds to complete in order
-   * to avoid milliseconds of noise.  This may be okay in
-   * an application like rotating a knob where milliseconds
-   * of debounce is required. The software must logically debounce 
-   * the noise by using techniques like timing delays, multiple
-   * samples, inference (best guess from last state) or by  
-   * pattern, or in combination. 
+   A significant bounce was typically observed at 2-3 milliseconds and 
+   sometimes up to 5ms on the "break". A bounce of 1ms was 
+   sometimes observed on a slow "make".  Since there are 2 signals 
+   in a quadrature encoder firing at offset times, it is doubly
+   complicated to confidently detect edges and sample the 
+   the polarity of the 2 switched signals due to bounce.
+   
+   A rotary encoder without detents may have less bound because 
+   the detent's armature doesn't exist thus reducing kickback. 
+   
+   The 2 encoder signals will likely require hardware or software 
+   debounce to improve the stability of readings.
+   
+   Hardware: Typically, an RC circuit is applied to the encoder's 
+   signal lines in order to reduce the bounce.  
+   Often times, this is effective but not always a perfect fix.  
+   Additionally, a Schottky input may further help reject 
+   unintended noise from triggering logic levels.
+   
+   Software: To debounce the encoder's signals in software, 
+   techniques like timing delays, multiple samples, 
+   edge detection, inference (best guess from the last state), 
+   pattern/state, or in combination may be used.  For IoT processors, 
+   10 to 25 microseconds is a typical estimate per I/O sample. 
+   This allows an ISR to sample and exit quickly 
+   (typically within 100us).
  
-  FYI 
-   //PSNS states
-    //(Previous State Next State - code as the input):
-    //https://www.best-microcontroller-projects.com/rotary-encoder.html#Taming_Noisy_Rotary_Encoders
- 
- */
- 
+
+  REFERENCES
+  See description and source examples from:
+  https://playground.arduino.cc/Main/RotaryEncoders
+
+  //PSNS states (Previous State Next State - code as the input):
+  //https://www.best-microcontroller-projects.com/rotary-encoder.html#Taming_Noisy_Rotary_Encoders
+
+*/
 
 #ifndef __MOTION_ENCODERS_H
 #define __MOTION_ENCODERS_H
