@@ -4,10 +4,12 @@
 #define pinEnData0  A3
 #define pinEnClk1   A4
 #define pinEnData1  A5
+#define pinSw0	    11  
+#define pinSw1      12
 
 //instantiate encoder objects
-CEncoder DinL(11, pinEnClk0, pinEnData0);
-CEncoder DinR(12, pinEnClk1, pinEnData1);
+CEncoder DinL(pinSw0, pinEnClk0, pinEnData0);
+CEncoder DinR(pinSw1, pinEnClk1, pinEnData1);
 
 /**
  * setup
