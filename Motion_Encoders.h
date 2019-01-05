@@ -4,13 +4,16 @@ Motion_Encoders.h
 @author: Will Patton http://willpatton.com 
 
 ROTORARY ENCODERS
-  See description from:
+
+  See description and source examples from:
   https://playground.arduino.cc/Main/RotaryEncoders
    
   APPLICATION 
-     User interface control with knob and detent feel
-     such as a volume, tuning, or brightness (response >10ms).
-     Not suitable for a high RPM motor encoder (response <10ms).
+     This is for a physical user interface control with knob/detent 
+     and push button switch such as a volume, tuning, or 
+     brightness (response >10ms).
+
+     This code may not be suitable for a high RPM motor encoder (response <10ms).
      
      QUADUATURE - There are 2 signals and therefore 4 possible 
      states (edges) that occur (i.e. "quad").
@@ -21,7 +24,17 @@ ROTORARY ENCODERS
 
      SIGNALS (EDGE DETETION)
      PERSPECTIVE from "A" RISING edge
-     
+
+             A leads B - CW
+     A  ____|----|____|----|____|
+     B     ____|----|____|----|
+            ^ ^  ^ ^
+            | |  | |
+            | |  | SAMPLE (*) 
+            | |  IRQ A FALLING edge samples B as HIGH
+            | SAMPLE (*)  
+            IRQ A RISING edge samples A as LOW
+ 
              A lags B - CCW
      A    ____|----|____|----|____|
      B  ____|----|____|----|
@@ -36,16 +49,6 @@ ROTORARY ENCODERS
                 If A AND B are both the same level, then CCW.
                 If A XOR B are both different levels, the CW
      
-        A leads B - CW
-     A  ____|----|____|----|____|
-     B     ____|----|____|----|
-            ^ ^  ^ ^
-            | |  | |
-            | |  | SAMPLE (*) 
-            | |  IRQ A FALLING edge samples B as HIGH
-            | SAMPLE (*)  
-            IRQ A RISING edge samples A as LOW
- 
   TIMING
     Example for a 24 point detent rotoray encoder.
 

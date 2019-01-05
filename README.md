@@ -12,20 +12,22 @@ Here's an example to instantiate the class in a sample program:
 	#define pinEnData0  A3
 	#define pinEnClk1   A4
 	#define pinEnData1  A5
+	#define pinSw0		11  
+	#define pinSw1		12
 
 	//instantiate encoder objects
-	CEncoder DinL(11, pinEnClk0, pinEnData0);
-	CEncoder DinR(12, pinEnClk1, pinEnData1);
+	CEncoder DinL(pinSw0, pinEnClk0, pinEnData0);
+	CEncoder DinR(pinSw1, pinEnClk1, pinEnData1);
 
 	/**
 	 * setup
 	 */
 	void setup() { 
 	  //interrupts
-	  attachInterrupt(pinEnClk0, isrEncoder0A, RISING);   // encoder 0 clock 
-	  attachInterrupt(pinEnData0, isrEncoder0B, RISING);  // encoder 0 data  
-	  attachInterrupt(pinEnClk1, isrEncoder1A, RISING);   // encoder 1 clock  
-	  attachInterrupt(pinEnData1, isrEncoder1B, RISING);  // encoder 1 data 
+	  attachInterrupt(pinEnClk0,  isrEncoder0A, RISING);   	// encoder 0 clock 
+	  attachInterrupt(pinEnData0, isrEncoder0B, RISING);  	// encoder 0 data  
+	  attachInterrupt(pinEnClk1,  isrEncoder1A, RISING);	// encoder 1 clock  
+	  attachInterrupt(pinEnData1, isrEncoder1B, RISING);  	// encoder 1 data 
 	}
 
 	/**

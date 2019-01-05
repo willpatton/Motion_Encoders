@@ -1,13 +1,12 @@
 /**
  * Motion_Encoders.cpp
+*
  * @author: Will Patton http://willpatton.com 
  *
  */
 
 //#define __MOTION_ENCODERS_H
 #include "Motion_Encoders.h"
-
-
 
 
 //constructor
