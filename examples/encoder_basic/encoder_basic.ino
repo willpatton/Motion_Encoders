@@ -1,3 +1,14 @@
+/**
+ * Motion_Encoders.h
+ * 
+ * @author: Will Patton http://willpatton.com
+ *
+ * Uses the Motion_Encoders library 
+ * https://github.com/willpatton/Motion_Encoders
+ * 
+ * Example:
+ */
+
 #include "Motion_Encoders.h"
 
 #define pinEnClk0   A2
@@ -16,9 +27,9 @@ CEncoder DinR(pinSw1, pinEnClk1, pinEnData1);
  */
 void setup() { 
   //interrupts
-  attachInterrupt(pinEnClk0, isrEncoder0A, RISING);   // encoder 0 clock 
+  attachInterrupt(pinEnClk0,  isrEncoder0A, RISING);  // encoder 0 clock 
   attachInterrupt(pinEnData0, isrEncoder0B, RISING);  // encoder 0 data  
-  attachInterrupt(pinEnClk1, isrEncoder1A, RISING);   // encoder 1 clock  
+  attachInterrupt(pinEnClk1,  isrEncoder1A, RISING);  // encoder 1 clock  
   attachInterrupt(pinEnData1, isrEncoder1B, RISING);  // encoder 1 data 
 }
 

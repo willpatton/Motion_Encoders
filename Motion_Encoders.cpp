@@ -1,13 +1,12 @@
 /**
- * Motion_Encoders.cpp
-*
+ * Motion_Encoders.h
+ *
  * @author: Will Patton http://willpatton.com 
  *
  */
 
 //#define __MOTION_ENCODERS_H
 #include "Motion_Encoders.h"
-
 
 //constructor
 CEncoder::CEncoder(uint8_t pinSW, uint8_t pinEnClk, uint8_t pinEnData){
@@ -33,10 +32,11 @@ CEncoder::CEncoder(uint8_t pinSW, uint8_t pinEnClk, uint8_t pinEnData){
     en_data   = digitalRead(_enPinData);  //read initial state
     en_pos = 0;
     en_dir = 0;
+    en_rate = 1;    //1 normal (1:1 multiplier)
     focus = NONE;
 
     //timers
-    timestamp0_irq = micros();
+    timestamp_irq = micros();
     timer = millis();
 }
 
@@ -47,13 +47,14 @@ CEncoder::CEncoder(uint8_t pinSW, uint8_t pinEnClk, uint8_t pinEnData){
 void CEncoder::loop_controls(){
 
   //READ 
-  switches();
+  switches();   //a caller to read the pushbutton switch by polling.  
+
 }
 
 
 /**
  * SWITCHES
- * read switch via polling
+ * read switch via polling. Not millisecond time sensitive.
  */
 void CEncoder::switches(){
 
@@ -84,7 +85,7 @@ void CEncoder::switches(){
       sw_state = HIGH;
       focus = SWITCH;
       sw_pos = SW_MIN;  
-      en_pos = 15;  //TEMP PATCH
+      en_pos = 127;  //TEMP PATCH
       en_dir = 0;
       if(_debug){Serial.println("Reset Switch");}
     }
@@ -93,45 +94,65 @@ void CEncoder::switches(){
 
 
 /**
- * ISR - assumes "interrupt" on rising edge only
+ * ISR CH-A 
+ * assumes "interrupt" on rising edge only
+ * CH-A accelarates the variable rate rotation
  */
 void CEncoder::isrEncoderA(){
-  focus = ENCODER; 
 
-  //if already set, do nothing
+  //if already set, do nothing, possibly noise
   if(enIsrFlag){
     return;
   }
 
+  //Detect turning rate in microseconds
+  //Has it been 20ms or less since the last CH-A IRQ?
+  if(micros() - timestamp_irq < 20000) {
+    //yes, then the encoder is twisting rapidly
+    en_rate = 10;   //10x (10:1) multiplier coarse adjustment
+  } else {
+    en_rate = 1;    //1x  (1:1) multiplier normal/fine adjustment
+  }
+  timestamp_irq = micros(); //reset timestamp this event
+
+  //Set
+  focus = ENCODER;    //this control is now in focus
   enIsrFlag = true;   //set flag
   en_clk = true;      //if here due to rising edge, then this signal must be high
 
-  en_data = digitalRead(_enPinData);
+  //Read
+  en_data = digitalRead(_enPinData); //data pin
+
+  //Calc
   if(!en_data){
     //clk is leading data, rotation is CW
     en_dir = 1;
-    en_pos++;
+    en_pos = en_pos + en_rate;
   }
   if(en_data){
     //clk is same as data, rotation is CCW
     en_dir = -1;
-    en_pos--;
+    en_pos = en_pos - en_rate;
   }
   if(_debug){Serial.print("isrEncoderA("); Serial.print(_enPinClk); Serial.print(") pos: ");Serial.println(en_pos);}
 }
 
+/**
+ * ISR CH-B 
+ * assumes "interrupt" on rising edge only
+ */
 void CEncoder::isrEncoderB(){
-  focus = ENCODER; 
 
  //if already clear, do nothing
   if(!enIsrFlag){
     return;
   }
 
+  focus = ENCODER;     //this control is now in focus
   enIsrFlag = false;   //clear flag
   en_data = true;      //if here due to rising edge, then this signal must be high
   
-  en_clk = digitalRead(_enPinClk);
+  en_clk = digitalRead(_enPinClk);  //clk pin
   if(en_clk){
     //clk is leading data, rotation is CW
     en_dir = 1;
