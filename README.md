@@ -1,6 +1,6 @@
 Motion Encoders
 ===========
-This project is a library/class to sample quadrature encoded signals to determine position, direction, focus, and spin velocity of an encoder. This technique uses the rising edge detection of an interrupt,  a state machine, and microsecond timer. The advantage of this code is that it can an instantiated object for numerous encoders in the project. This library is also compatible with the Arduino IDE.
+This project is a library/class to sample quadrature encoded signals to determine position, direction, focus, and spin velocity of an encoder. This technique uses the rising edge detection of an interrupt,  a state machine, and microsecond timer. The advantage of this code is that it can an instantiate an object for numerous encoders in the project without duplicating code (DNR). This library is compatible with the Arduino IDE.
 
 ## About Rotary Encoders
 
