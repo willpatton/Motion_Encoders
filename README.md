@@ -10,9 +10,10 @@ ROTARY ENCODERS
     This code is for an encoder/switch typically found
     as volume, tuning, speed, or brightness control.
     The encoder has a physical knob with detents and 
-    push button switch. The position and direction
-    of the encoder is read by the calling application
-    using a public method (function call). 
+    push button switch. The position, direction, and
+    focus (switch or encoder) of the encoder is 
+    read by the calling application using a 
+    public method (function call). 
      
     QUADRATURE - There are 2 signals and therefore 4 possible 
     states (edges) that occur (i.e. "quad").  
