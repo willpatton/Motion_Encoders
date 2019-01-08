@@ -1,8 +1,9 @@
 /**
  * Motion_Encoders.h
  *
- * @author: Will Patton 
- * @url:    http://willpatton.com 
+ * @author:   Will Patton 
+ * @url:      http://willpatton.com
+ * @license:  
  *
  */
 
@@ -16,10 +17,10 @@
 
 #define SW_MIN 0        //sw limit min
 #define SW_MAX 5        //sw limit max
-#define NONE 0
-#define SWITCH 1
-#define ENCODER 2
-#define SW_RESET 3      //reset is a temporary focus
+#define NONE      0     //focus
+#define SWITCH    1     //focus
+#define ENCODER   2     //focus
+#define SW_RESET  3     //focus - the "reset" has a temporary focus
 
 class CEncoder {
 
@@ -40,8 +41,8 @@ class CEncoder {
     uint8_t get_focus();          //which control has the current focus
 
   private:
-    uint16_t  instance;           //a random instance number to identify this object 
-    uint8_t   _debug = true;      //echo info to serial console
+    uint16_t  instance;      //a random instance number to identify this object 
+    uint8_t   _debug = true; //echo info to serial console
 
     //pins
     uint8_t   _swPin;        //switch
@@ -62,11 +63,11 @@ class CEncoder {
     volatile uint8_t enIsrFlag = 0;  //1 ISR in progress, 0 isr cleared, free
     
     //focus
-    int focus = NONE;
+    uint8_t focus = NONE;   //none = 0, 1 = switch, 2 = encoder...
 
     //timers
     //uint32_t  timer;			   //TBD
-    uint32_t  timer_sw_hold;		   //millisecond timer to measure duration of the switch press
+    uint32_t  timer_sw_hold;	 //millisecond timer to measure duration of the switch press
     uint32_t 	timestamp_irq;	 //microsecond timer to measure durecation between IRQs
 
 
