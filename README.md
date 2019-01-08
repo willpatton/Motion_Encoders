@@ -1,21 +1,25 @@
 Motion Encoders
 ===========
-This project is a library/class to sample quadrature encoded signals to determine position, direction, focus, and spin velocity of an encoder. This technique uses the edge detection of an interrupt,  a state machine, and microsecond timer. The advantage of this code is that it can an instantiate an object for numerous encoders in an application without duplicating code (DNR). This library is compatible with the Arduino IDE.
+This project is a library/class to sample quadrature encoded signals to determine position, direction, focus, and spin velocity of an encoders. This code's technique uses the edge detection of an interrupt, a state machine, and microsecond timer. The advantage of this code is that it provides precise and stable control over the encoder with sub 1-millisecond quickness. This code is organized as a Class so every encoder is it's own software object without duplicating code (DNR). This library is compatible with the Arduino IDE.
 
 ## About Rotary Encoders
 
   APPLICATION 
-    This code is for an encoder/switch typically found
-    as volume, tuning, brightness, or motor control.
-    The encoder has a physical knob with detents and 
-    a pushbutton switch. The position, direction, and
-    focus (switch or encoder) of the encoder is 
-    read by the calling application using a 
+    This code is for an encoder with pushbutton switch 
+    typically found as volume, tuning, brightness, or 
+    motor control. The encoder portion may also have 
+    detents and rotated by a physical knob of countless varities. 
+    The position, direction, and focus (switch 
+    versus encoder) of the encoder's properties
+    can be read by the calling application using a 
     public method (function call). The velocity of 
-    the encoder's rotation is measured via a
+    the encoder's rotation is also measured via a
     microsecond timer so that the software can
-    vary the rate-of-change.
-     
+    vary the rate-of-change.  All of the above is
+    intended to create the feel of an analog 
+    potentiometer using digital techniques
+    of an encoder/switch.
+
     QUADRATURE - There are 2 signals (Channel A, Channel B)
     and therefore 4 possible states (edges) that 
     occur, hence "quad".
@@ -30,9 +34,12 @@ This project is a library/class to sample quadrature encoded signals to determin
 	rotational speed.  
 	
 	SIGNAL SAMPLING 
-	The 2 encoder signals can be polled or assigned to
-	interrupts.  For interrupts, it may be more precise
-	to interupt on every rising/falling edge (half-step).
+	The 2 encoder signals are assigned to interrupts 
+	(or may be polled).  For interrupts, it may be necessary
+	to interupt on every half-cycle (half-step) or 
+	full-cycle (full-steps) of the sampled signals.  In
+	my finding, full-steps provided the best combination 
+	of precision and quickness. 
 
      CH-A leads CH-B = Clockwise CW
      A  ____|----|____|----|____|
@@ -74,8 +81,20 @@ This project is a library/class to sample quadrature encoded signals to determin
 	lookup table. As desired states are found, the 
 	direction becomes known for desired sample. 
 	Subsequently, the position can be incremented or 
-	decremented. 
-	Uncertain/unknown states are discarded. 
+	decremented. Uncertain/unknown states are discarded. 
+
+	SCALE
+	Each state typically corresponds to 1 detent. 
+	A 24 point encoder with 24 detents would have 24 positions
+	in one rotation. If adding "1" to every position change,
+	it would take 4 rotations to increase the position
+	indicator from 1 to 96. If adding "10" to every position
+	change, it would take 1/2 turn or 10 detents to reach 96.
+	If an application requires 1024 positions (10-bit resolution),
+	then it becomes necessary to vary the rate of change
+	based on the speed of the encoder's rotation in order to
+	traverse the entire scale with minimal effort.  This 
+	variable rate of change allows for coarse/fine adjustment.  
 
   	TIMING
 	Timing the interval between interrupts can indicate
