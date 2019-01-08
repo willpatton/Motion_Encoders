@@ -94,7 +94,9 @@ This project is a library/class to sample quadrature encoded signals to determin
 	then it becomes necessary to vary the rate of change
 	based on the speed of the encoder's rotation in order to
 	traverse the entire scale with minimal effort.  This 
-	variable rate of change allows for coarse/fine adjustment.  
+	variable rate of change allows for coarse/fine adjustment.
+	It can be accomplished be timing the interval between
+	the encoder's interrupts.  
 
   	TIMING
 	Timing the interval between interrupts can indicate
