@@ -2,23 +2,10 @@ Motion Encoders
 ===========
 This project is a library/class to sample quadrature encoded signals to determine position, direction, focus, and spin velocity of an encoders. This code's technique uses the edge detection of an interrupt, a state machine, and microsecond timer. The advantage of this code is that it provides precise and stable control over the encoder with sub 1-millisecond quickness. This code is organized as a Class so every encoder is it's own software object without duplicating code (DNR). This library is compatible with the Arduino IDE.
 
-## About Rotary Encoders
-
-  APPLICATION 
-    This code is for an encoder with pushbutton switch 
-    typically found as volume, tuning, brightness, or 
-    motor control. The encoder portion may also have 
-    detents and rotated by a physical knob of countless varities. 
-    The position, direction, and focus (switch 
-    versus encoder) of the encoder's properties
-    can be read by the calling application using a 
-    public method (function call). The velocity of 
-    the encoder's rotation is also measured via a
-    microsecond timer so that the software can
-    vary the rate-of-change.  All of the above is
-    intended to create the feel of an analog 
-    potentiometer using digital techniques
-    of an encoder/switch.
+## Application
+This code is for an encoder with pushbutton switch typically found as volume, tuning, brightness, or motor control. The encoder portion may also have detents and rotated by a physical knob of countless varities. 
+The position, direction, and focus (switch versus encoder) of the encoder's properties can be read by the calling application using a public method (function call). The velocity of the encoder's rotation is also measured via a microsecond timer so that the software can vary the rate-of-change.  
+All of the above is intended to create the feel of an analog potentiometer using digital techniques of an encoder/switch.
 
     QUADRATURE - There are 2 signals (Channel A, Channel B)
     and therefore 4 possible states (edges) that 
