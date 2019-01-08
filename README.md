@@ -10,22 +10,32 @@ ROTARY ENCODERS
     This code is for an encoder/switch typically found
     as volume, tuning, speed, or brightness control.
     The encoder has a physical knob with detents and 
-    push button switch. The position, direction, and
+    a pushbutton switch. The position, direction, and
     focus (switch or encoder) of the encoder is 
     read by the calling application using a 
-    public method (function call). 
+    public method (function call). The velocity of 
+    the encoder's rotation is measured via a
+    microsecond timer so that the software can
+    vary the rate-of-change.
      
-    QUADRATURE - There are 2 signals and therefore 4 possible 
-    states (edges) that occur (i.e. "quad").  
+    QUADRATURE - There are 2 signals (Channel A, Channel B)
+    and therefore 4 possible states (edges) that 
+    occur, hence "quad".
 
     METHOD 
-	Detect interrupt on edge, then sample an encoder's signal once, 
-	then set flag(s) to indicate state.  
-	Optionally, use a microsecond timer to measure the rotational speed.  
-	Also, the signals are also debounced using a 
-	typical RC circuit in order to minimize spurious interrupts. 
+	Detect interrupt on edge, then sample an encoder's signals, 
+	then set variables to indicate direction and position. 
+	For precise control, a PSNS state machine supplements the
+	signals that were sampled to more accurately sense the 
+	encoder's movement.   
+	Optionally, a microsecond timer is used to measure the 
+	rotational speed.  
+	
+	SIGNAL SAMPLING 
+	The 2 encoder signals can be polled or assigned to
+	interrupts.  For interrupts, it may be more precise
+	to interupt on every rising/falling edge (half-step).
 
-	SIGNALS 
      CH-A leads CH-B = Clockwise CW
      A  ____|----|____|----|____|
      B     ____|----|____|----|
@@ -50,11 +60,35 @@ ROTARY ENCODERS
                 If A AND B are both the same level, then CCW.
                 If A XOR B are both different levels, the CW
      
+	For IoT processors, 10 to 25 microseconds is a typical 
+   	estimate per I/O sample using a library call.  It is
+   	desirable for the interrupt service routine (isr) to 
+   	complete within 100 microseconds. 
+     
+    Note: The encoder's signals will typically need to be debounced 
+	using a RC circuit to dampen noise. See DEBOUNCE below.
+	
+	STATE
+	A PSNS (Previous-State, Next-State) state machine is
+	a table of desired states. As the encoder turns and the 
+	CH-A CH-B signals are sampled, the values read are compared
+	with the previous state (PS) and next state (NS) in a 
+	lookup table. As desired states are found, the 
+	direction becomes known for desired sample. 
+	Subsequently, the position can be incremented or 
+	decremented. 
+	Uncertain/unknown states are discarded. 
+
   	TIMING
+	Timing the interval between interrupts can indicate
+	the twisting speed of the encoder (velocity).  This
+	can be used to vary the rate-of-change to create 
+	a coarse/fine feel like that of a potentiometer. 
+
 	Here are rotational timing measurements 
 	using an oscilloscope for a 24 point 
-	rotary encoder with a 1" diameter knob
-	turned by a real human.
+	rotary encoder with a 25mm (1") diameter knob
+	as turned by a real human.
 
     A <--> A  
     "INTERVAL" from CH A to CH A.
@@ -76,11 +110,11 @@ ROTARY ENCODERS
 
 	The timing interval A <--> A is measured with a 
 	microsecond timer (in software, by the ISR).  
-	If the interval between CH-A interrupt is around 
+	If the interval between CH-A interrupts is around 
 	20 ms, then the twisting speed is considered "fast" 
 	so the desired adjustment is "coarse" 10x (10:1) instead of 
-	"normal/fine" 1x (1:1) default.  This would be a considered
-	"variable rate" adjustment. 
+	"normal/fine" 1x (1:1) default. This technique
+	would be a considered a "variable rate" adjustment. 
 
   DEBOUNCE
    There is typically bounce (switching noise) on a rotary 
@@ -91,33 +125,27 @@ ROTARY ENCODERS
    use for precise and stable adjustments.  
 
    A significant bounce on the "break" was typically 
-   observed at 2-3 milliseconds and sometimes up to 5ms. 
+   observed at 2-3 milliseconds (and sometimes up to 5ms). 
    A bounce of 1ms was sometimes observed on a slow "make".  
    Since there are 2 signals in a quadrature encoder 
    firing at offset times, it is doubly complicated to 
-   confidently detect edges and sample the 
-   the polarity of the 2 switched signals due to bounce.
-   
-   A rotary encoder without detents may have less bound because 
-   the detent's armature doesn't exist thus reducing kickback. 
+   confidently detect levels/edges due to bounce. 
    
    The 2 encoder signals will likely require hardware or software 
    debounce to improve the stability of readings (or both).
    
-   Hardware: Typically, an RC circuit is applied to the encoder's 
-   signal lines in order to reduce the bounce.  
+   Hardware: Typically, an RC circuit is applied to the 
+   encoder's signal lines in order to reduce the bounce
+   (10K ohm, 0.01uf).  
    Often times, this is effective but not always a perfect fix.  
-   Additionally, a Schottky input may further help reject 
-   unintended noise from triggering logic levels.  Software 
-   debounce is also needed to ensure stability. 
+   Additionally, a Schottky input may further reject 
+   unintended noise from triggering logic levels. 
    
-   Software: To further debounce the encoder's signals in software, 
-   techniques like timing delays, multiple samples, 
+   Software: To further debounce the encoder's signals, 
+   software techniques like timing delays, multiple samples, 
    edge detection, inference (best guess from the last state), 
-   pattern/state, or in combination may be used.  For IoT processors, 
-   10 to 25 microseconds is a typical estimate per I/O sample. 
-   This allows an ISR to sample and exit quickly 
-   (typically within 100us).
+   pattern/state (PSNS), or in combination may be used.  
+
  
 ## Example
 An example program is included in the examples folder.
@@ -128,9 +156,12 @@ This code is known to compile using the Arduino IDE on a SAMD21 processor.
 ## For more information
 
 REFERENCES
-A variety of implementations and understandings of encoders.
+A variety of implementations and understandings of encoders from the Arduino community.
 See description and source examples from:
 https://playground.arduino.cc/Main/RotaryEncoders
 
 PSNS states (Previous State, Next State):
 https://www.best-microcontroller-projects.com/rotary-encoder.html#Taming_Noisy_Rotary_Encoders
+
+State machine organized for the Arduino IDE - Ben Buxton (2011).
+http://www.buxtronix.net/2011/10/rotary-encoders-done-properly.html

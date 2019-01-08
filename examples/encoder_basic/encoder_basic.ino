@@ -1,7 +1,8 @@
 /**
  * Motion_Encoders.h
  * 
- * @author: Will Patton http://willpatton.com
+ * @author: Will Patton 
+ * @url:    http://willpatton.com
  *
  * Uses the Motion_Encoders library 
  * https://github.com/willpatton/Motion_Encoders
