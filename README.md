@@ -4,11 +4,9 @@ This project is a library/class to sample quadrature encoded signals to determin
 
 ## About Rotary Encoders
 
-ROTARY ENCODERS
-   
   APPLICATION 
     This code is for an encoder/switch typically found
-    as volume, tuning, speed, or brightness control.
+    as volume, tuning, brightness, or motor control.
     The encoder has a physical knob with detents and 
     a pushbutton switch. The position, direction, and
     focus (switch or encoder) of the encoder is 
@@ -146,22 +144,25 @@ ROTARY ENCODERS
    edge detection, inference (best guess from the last state), 
    pattern/state (PSNS), or in combination may be used.  
 
- 
 ## Example
-An example program is included in the examples folder.
+An example program is included in the examples folder. This code is organized as a Class so each encoder can be it's own object.
+
+## Build
+This code is organized as an installable Arduino library and is listed as "Motion Encoders".  Copy this library into the Arduino libraries folder and #include the Motion_Encoders.h file to your progam. 
 
 ## Supported Platforms
-This code is known to compile using the Arduino IDE on a SAMD21 processor. 
+This code is applicable to new style "3.3 volt" boards with the SAMD21 processor (such as the Adafruit Feather or Arduino MKR). These boards/processor have enough interrupt pins to directly handle 3 encoders at once (with pushbutton switches, 9 signals in total). 
 
-## For more information
-
-REFERENCES
+## References
 A variety of implementations and understandings of encoders from the Arduino community.
 See description and source examples from:
 https://playground.arduino.cc/Main/RotaryEncoders
 
-PSNS states (Previous State, Next State):
+PSNS states (Previous State, Next State) write-up:
 https://www.best-microcontroller-projects.com/rotary-encoder.html#Taming_Noisy_Rotary_Encoders
 
-State machine organized for the Arduino IDE - Ben Buxton (2011).
+State machine lookup table with half/full steps sampling - Ben Buxton (2011).
 http://www.buxtronix.net/2011/10/rotary-encoders-done-properly.html
+
+## License
+Copyright (c) 2018 Will Patton. GNU GPL Version 3.
