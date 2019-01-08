@@ -142,10 +142,10 @@ All of the above is intended to create the feel of an analog potentiometer using
    
    Hardware: Typically, an RC circuit is applied to the 
    encoder's signal lines in order to reduce the bounce
-   (10K ohm, 0.01uf).  
-   Often times, this is effective but not always a perfect fix.  
-   Additionally, a Schottky input may further reject 
-   unintended noise from triggering logic levels. 
+   (10K ohm, 0.01uf). Often times, this is effective 
+   but not always a perfect fix.  Additionally, a Schottky 
+   input may further reject unintended noise from 
+   triggering logic levels. 
    
    Software: To further debounce the encoder's signals, 
    software techniques like timing delays, multiple samples, 
@@ -153,13 +153,13 @@ All of the above is intended to create the feel of an analog potentiometer using
    pattern/state (PSNS), or in combination may be used.  
 
 ## Example
-An example program is included in the examples folder. This code is organized as a Class so each encoder can be it's own object.
+An example program is included in the examples folder. This code is organized as a Class so each encoder can be it's own software object.
 
 ## Build
-This code is organized as an installable Arduino library and is listed as "Motion Encoders".  Copy this library into the Arduino libraries folder and #include the Motion_Encoders.h file to your progam. 
+This code is organized as an installable Arduino library and is listed as "Motion Encoders".  Copy this library into the Arduino libraries folder and #include the Motion_Encoders.h file into your progam. 
 
 ## Supported Platforms
-This code is applicable to new style "3.3 volt" boards with the SAMD21 processor (such as the Adafruit Feather or Arduino MKR). These boards/processor have enough interrupt pins to directly handle 3 encoders at once (with pushbutton switches, 9 signals in total). 
+This code is applicable to newer style "3.3 volt" boards with the SAMD21 processor (such as the Adafruit Feather or Arduino MKR). That's because these boards/processors have enough interrupt pins to directly handle 3 encoders at once (with pushbutton switches, 9 signals total). 
 
 ## References
 A variety of implementations and understandings of encoders from the Arduino community.
@@ -173,4 +173,4 @@ State machine lookup table with half/full steps sampling - Ben Buxton (2011).
 http://www.buxtronix.net/2011/10/rotary-encoders-done-properly.html
 
 ## License
-Copyright (c) 2018 Will Patton. GNU GPL Version 3.
+Copyright (c) 2018 Will Patton. MIT License.

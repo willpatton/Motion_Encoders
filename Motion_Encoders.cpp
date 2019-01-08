@@ -1,9 +1,8 @@
 /**
  * Motion_Encoders.h
- *
- * @author: Will Patton 
- * @url:    http://willpatton.com 
- *
+ * @author:   Will Patton 
+ * @url:      http://willpatton.com 
+ * @license:  MIT License
  */
 
 //#define __MOTION_ENCODERS_H
