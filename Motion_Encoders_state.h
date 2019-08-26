@@ -1,5 +1,8 @@
 /**
- * Rotary encoder state machine for arduino.
+ * Rotary encoder state machine for Arduino.
+ *
+ *
+ * Source Credits:
  *
  * Copyright 2011 Ben Buxton. Licenced under the GNU GPL Version 3.
  * Contact: bb@cactii.net
