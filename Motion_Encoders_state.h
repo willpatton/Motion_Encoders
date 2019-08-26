@@ -1,5 +1,12 @@
+
 /**
- * Rotary encoder state machine for Arduino.
+ * Motion_Encoders.h
+ * @author:   Will Patton 
+ * @url:      https://github.com/willpatton/Motion_Encoders
+ * @license:  MIT License
+ *
+ *
+ * Rotary encoder state machine
  *
  *
  * Source Credits:

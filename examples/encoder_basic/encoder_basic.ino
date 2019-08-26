@@ -1,17 +1,18 @@
 /**
- * Motion_Encoders.h
+ * encoder_basic.ino
  * 
  * @author: Will Patton 
- * @url:    http://willpatton.com
+ * @url:      https://github.com/willpatton/Motion_Encoders
+ * @license:  MIT License
  *
- * Uses the Motion_Encoders library 
- * https://github.com/willpatton/Motion_Encoders
- * 
- * Example:
+ * Example
+ * This project demos the library using an Arduino IDE sketch with serial console output.
+ *
  */
 
 #include "Motion_Encoders.h"
 
+//PINOUTS
 #define pinEnClk0   A2
 #define pinEnData0  A3
 #define pinEnClk1   A4
@@ -19,7 +20,7 @@
 #define pinSw0	    11  
 #define pinSw1      12
 
-//instantiate encoder objects
+//OBJECTS
 CEncoder DinL(pinSw0, pinEnClk0, pinEnData0);
 CEncoder DinR(pinSw1, pinEnClk1, pinEnData1);
 

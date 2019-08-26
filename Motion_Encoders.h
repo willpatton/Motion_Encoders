@@ -8,7 +8,8 @@
 #ifndef __MOTION_ENCODERS_H
 #define __MOTION_ENCODERS_H
 
-//UNCOMMENT - to use the state algorithm. Else, use the "signal only" algorithm
+//There are 2 sampling algorithms 1) State or 2) Signal (decremented). 
+//Preferred: Use the state algorithm. Comment to use the "signal only" algorithm
 #define __MOTION_ENCODERS_STATE_H 
 
 #include "Arduino.h"
@@ -19,6 +20,7 @@
 #define SWITCH    1     //focus
 #define ENCODER   2     //focus
 #define SW_RESET  3     //focus - the "reset" has a temporary focus
+
 
 class CEncoder {
 

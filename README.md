@@ -144,6 +144,5 @@ http://www.buxtronix.net/2011/10/rotary-encoders-done-properly.html
 ## Contact
 https://github.com/willpatton/Motion_Encoders
 
-
 ## License
 Copyright (c) 2018 Will Patton. MIT License.
