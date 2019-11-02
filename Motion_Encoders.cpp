@@ -13,7 +13,8 @@
 CEncoder::CEncoder(uint8_t pinSW, uint8_t pinEnClk, uint8_t pinEnData){
 
     //instance
-    randomSeed(analogRead(0));    //create random seed value
+    //pinMode(0, INPUT);
+    //randomSeed(analogRead(0));    //create random seed value from analog noise 
     instance = random(100,1000);
 
     //pin
@@ -41,6 +42,12 @@ CEncoder::CEncoder(uint8_t pinSW, uint8_t pinEnClk, uint8_t pinEnData){
     //timer = millis();
 }
 
+/**
+  begin
+*/
+bool CEncoder::begin(){
+ //TODO 
+}
 
 /**
  loop controls
@@ -52,6 +59,19 @@ void CEncoder::loop_controls(){
 
 }
 
+/**
+ * return state of ISR flag
+ */
+uint8_t CEncoder::get_isr_flag(){
+  return enIsrFlag;
+}
+
+/**
+ * clr ISR flag
+ */
+void CEncoder::clr_isr_flag(){
+  enIsrFlag = 0;
+}
 
 /**
  * SWITCHES
@@ -81,9 +101,10 @@ void CEncoder::switches(){
       if(_debug){Serial.print("Switch("); Serial.print(_swPin);Serial.println(") Release");}
     }
     
-    //reset
-    if((millis() - timer_sw_hold > 3000)){ 
-      sw_state = HIGH;
+    
+    //reset (press and hold)
+    if(!digitalRead(_swPin) && (millis() - timer_sw_hold > 3000)){ 
+      sw_state = LOW;
       focus = SW_RESET;
       //sw_pos = SW_MIN;
       //en_pos = 0;  
@@ -101,17 +122,24 @@ void CEncoder::switches(){
  */
 void CEncoder::isrEncoderA(){
 
+/*
   //if already set, do nothing, probably noise.  If state, then continue... noise handled okay.
   #ifndef __MOTION_ENCODERS_STATE_H
   if(enIsrFlag){
     return;
   }
   #endif
+*/
 
+/*
+ //if already clear, do nothing
+  if(!enIsrFlag){
+    return;
+  }
+*/
 
   //Set
   focus = ENCODER;    //this control is now in focus
-
 
   //"signal only" algorithm
   #ifndef __MOTION_ENCODERS_STATE_H
@@ -189,7 +217,7 @@ void CEncoder::isrEncoderA(){
   if(_debug){
     Serial.print("isrEncoderA("); Serial.print(_enPinClk); 
     Serial.print(") pos: ");Serial.print(en_pos); 
-    Serial.print(") inteval usec: ");Serial.print(interval); 
+    Serial.print(") interval usec: ");Serial.print(interval); 
     Serial.println();
   }
 }
@@ -201,13 +229,15 @@ void CEncoder::isrEncoderA(){
 #ifndef __MOTION_ENCODERS_STATE_H
 void CEncoder::isrEncoderB(){
 
+/*
  //if already clear, do nothing
   if(!enIsrFlag){
     return;
   }
+  */
 
   focus = ENCODER;     //this control is now in focus
-  enIsrFlag = false;   //clear flag
+  enIsrFlag = true;   //clear flag
   en_data = true;      //if here due to rising edge, then this signal must be high
   
   en_clk = digitalRead(_enPinClk);  //clk pin
